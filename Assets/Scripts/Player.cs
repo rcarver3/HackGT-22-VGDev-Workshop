@@ -22,13 +22,24 @@ public class Player : MonoBehaviour
 
     // Start is called before the first frame update
     void Start() {
-        
+        HideAndLockCursor();
     }
     
     // Update is called once per frame
     void Update()
     {
         MouseMove();
+
+        if (Time.time - _lastFireTime >= FireRate) {
+            if (Input.GetMouseButton(0)) {
+                Rigidbody orb = Instantiate(Bullet, transform.position, Quaternion.identity).GetComponent<Rigidbody>();
+                Quaternion cameraRotation = Quaternion.Euler(transform.eulerAngles);
+
+                Vector3 velocity = cameraRotation * Vector3.forward * 10;
+                orb.velocity = velocity;
+                _lastFireTime = Time.time;
+            }
+        }
     }
 
     void HideAndLockCursor() {
